@@ -19,11 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <Navbar />
-      <div className="pt-[4rem]"> {/* Agrega el margen superior aquí */}
-      {children}
-      <Footer/>
-      </div>
+        <Navbar />
+        <div className="pt-[4rem]">
+          {children}
+          <Footer />
+        </div>
       </body>
     </html>
   );
