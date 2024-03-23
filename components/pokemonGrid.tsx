@@ -74,7 +74,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
             </div>
           </div>
 
-          <div className="max-w-screen-lg mt-5 rounded-xl bg-white mx-auto flex flex-col justify-between min-h-[calc(100vh-10rem)]">
+          <div className="max-w-screen-lg mt-5 rounded-xl bg-white mx-[7%] flex flex-col justify-center min-h-[calc(100vh-10rem)]">
             <ul className="flex flex-wrap justify-center m-3">
               {filteredPokemonList.map((pokemon: PokemonDetails) => (
                 <PokemonCard

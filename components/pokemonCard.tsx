@@ -41,10 +41,10 @@ export function PokemonCard({ id, name, types, sprite }: PokemonCardProps) {
           loading="lazy"
           src={sprite}
           alt={name}
-          className="bg-gray-200  mx-auto rounded-md w-full aspect-square"
+          className="bg-gray-200   rounded-md w-full aspect-square"
         />
-        <span className="text-sm m-2 font-bold text-gray-600 font-flexo-bold mx-4">N.° {formattedId}</span>
-        <h2 className="text-2xl font-semibold  font-flexo-demi mt-5 mx-4 ">
+        <span className="text-sm m-2 font-bold text-gray-400 font-flexo-bold mx-4">N.° {formattedId}</span>
+        <h2 className="text-xl font-semibold text-gray-700 font-flexo-demi mt-3 mx-4 ">
           {name.charAt(0).toUpperCase() + name.slice(1)}
         </h2>
         <div className="flex gap-1 mx-4">
@@ -52,7 +52,7 @@ export function PokemonCard({ id, name, types, sprite }: PokemonCardProps) {
             types.map((type) => (
               <span
                 key={type}
-                className={`inline-block text-center px-4 py-1 text-sm rounded-md font-flexo-medium ${typeColors[type] || "bg-gray-400" } w-[80px]`}              >
+                className={`inline-block text-center px-3  text-xs rounded-sm font-flexo-medium ${typeColors[type] || "bg-gray-400" } w-[80px]`}              >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </span>
             ))}
