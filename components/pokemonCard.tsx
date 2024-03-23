@@ -44,7 +44,7 @@ export function PokemonCard({ id, name, types, sprite }: PokemonCardProps) {
           alt={name}
           className="bg-gray-200 block relative mx-auto rounded-md w-full aspect-square"
         />
-        <span className="text-sm font-bold text-gray-600">N.° {formattedId}</span>
+        <span className="text-sm font-bold text-gray-600 ">N.° {formattedId}</span>
         <h2 className="text-2xl font-semibold text-center mt-10">
           {name.charAt(0).toUpperCase() + name.slice(1)}
         </h2>
