@@ -52,7 +52,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
   return (
     <>
       <div
-        className="shadow-overlay bg-cover min-h-screen flex flex-col justify-between"
+        className="bg-cover min-h-screen flex flex-col justify-between"
         style={{
           background: `#fff url("https://assets.pokemon.com/static2/_ui/img/chrome/container_bg.png")`,
         }}
