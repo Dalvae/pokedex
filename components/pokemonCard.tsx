@@ -7,6 +7,10 @@ interface PokemonCardProps {
   sprite: string;
 }
 
+interface TypeColors {
+  [key: string]: string;
+}
+
 const typeColors = {
   fire: "bg-red-500 text-white",
   water: "bg-blue-500 text-white",
@@ -52,7 +56,7 @@ export function PokemonCard({ id, name, types, sprite }: PokemonCardProps) {
             types.map((type) => (
               <span
                 key={type}
-                className={`inline-block text-center px-3  text-xs rounded-sm font-flexo-medium ${typeColors[type] || "bg-gray-400" } w-[80px]`}              >
+                className={`inline-block text-center px-3  text-xs rounded-sm font-flexo-medium ${typeColors[type as keyof typeof typeColors] || "bg-gray-400" } w-[80px]`}              >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </span>
             ))}
