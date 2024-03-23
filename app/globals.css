@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Flexo-Bold';
+  src: url('/Flexo-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Flexo-Demi';
+  src: url('/Flexo-Demi.ttf') format('truetype');
+  font-weight: 500; /* Demi es generalmente más liviano que Bold, ajusta según sea necesario */
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Flexo-Medium';
+  src: url('/Flexo-Medium.ttf') format('truetype');
+  font-weight: 300; /* Demi es generalmente más liviano que Bold, ajusta según sea necesario */
+  font-style: normal;
+}
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

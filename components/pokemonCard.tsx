@@ -8,22 +8,21 @@ interface PokemonCardProps {
 }
 
 const typeColors = {
-  fire: "bg-red-500",
-  water: "bg-blue-500",
-  grass: "bg-green-500",
-  electric: "bg-yellow-500",
-  psychic: "bg-pink-500",
-  ice: "bg-cyan-500",
-  dragon: "bg-indigo-500",
-  dark: "bg-gray-800",
-  fairy: "bg-pink-200",
-  bug: "bg-green-300",
-  poison: "bg-purple-400",
-  stone: "bg-brown-400",
-  rock: "bg-yellow-800",
-  flying: "bg-sky-400",
-  ground: "bg-yellow-100 text-black",
-  // Agrega más tipos según sea necesario
+  fire: "bg-red-500 text-white",
+  water: "bg-blue-500 text-white",
+  grass: "bg-green-500 text-white",
+  electric: "bg-yellow-500 text-white",
+  psychic: "bg-pink-500 text-white",
+  ice: "bg-cyan-500 text-white",
+  dragon: "bg-indigo-500 text-white",
+  dark: "bg-gray-800 text-white",
+  fairy: "bg-pink-200 text-white",
+  bug: "bg-green-300 text-white",
+  poison: "bg-purple-400 text-white",
+  stone: "bg-brown-400 text-white",
+  rock: "bg-yellow-800 text-white",
+  flying: "bg-sky-400 text-white",
+  ground: "bg-yellow-200 text-black",
 };
 
 export function PokemonCard({ id, name, types, sprite }: PokemonCardProps) {
@@ -42,21 +41,18 @@ export function PokemonCard({ id, name, types, sprite }: PokemonCardProps) {
           loading="lazy"
           src={sprite}
           alt={name}
-          className="bg-gray-200 block relative mx-auto rounded-md w-full aspect-square"
+          className="bg-gray-200  mx-auto rounded-md w-full aspect-square"
         />
-        <span className="text-sm font-bold text-gray-600 ">N.° {formattedId}</span>
-        <h2 className="text-2xl font-semibold text-center mt-10">
+        <span className="text-sm m-2 font-bold text-gray-600 font-flexo-bold mx-4">N.° {formattedId}</span>
+        <h2 className="text-2xl font-semibold  font-flexo-demi mt-5 mx-4 ">
           {name.charAt(0).toUpperCase() + name.slice(1)}
         </h2>
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex gap-1 mx-4">
           {types &&
             types.map((type) => (
               <span
                 key={type}
-                className={`inline-block px-4 py-1 text-sm rounded-md ${
-                  typeColors[type] || "bg-gray-400 text-white"
-                }`}
-              >
+                className={`inline-block text-center px-4 py-1 text-sm rounded-md font-flexo-medium ${typeColors[type] || "bg-gray-400" } w-[80px]`}              >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </span>
             ))}
