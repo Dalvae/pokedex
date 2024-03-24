@@ -25,9 +25,10 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
     PokemonDetails[]
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+  const [isMobile, setIsMobile] = useState(false);
   const pokemonsPerPage = 12;
 
+  // Detalles de pokemon
   useEffect(() => {
     const fetchDetails = async () => {
       const details = await Promise.all(
@@ -38,17 +39,23 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
 
     fetchDetails();
   }, [pokemonList]);
+  //Handle Resize
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 900);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 900);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
+  //Handle Scoll
   useEffect(() => {
     const handleScroll = () => {
       if (!isMobile || searchText.length > 0) {
-        return; // Desactiva el scroll infinito si no es móvil o hay texto de búsqueda.
+        return; 
       }
 
       const scrollHeight = document.documentElement.scrollHeight;
@@ -64,6 +71,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile, currentPage, searchText]);
 
+  //Busqueda
   useEffect(() => {
     const startIndex = (currentPage - 1) * pokemonsPerPage;
     const endIndex = isMobile
@@ -78,19 +86,15 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
     setFilteredPokemonList(filtered);
   }, [searchText, detailedPokemonList, currentPage, isMobile]);
 
-  const renderPokemonList = () => {
-    return filteredPokemonList.map((pokemon: PokemonDetails) => (
-      <PokemonCard
-        key={pokemon.id}
-        id={pokemon.id}
-        name={pokemon.name}
-        types={pokemon.types}
-        sprite={pokemon.sprite}
-      />
-    ));
-  };
+  //Reestablece la paginacion cuando hay texto  en el buscador
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+    setCurrentPage(1); 
+  };
+  
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  
   return (
     <>
       <div
@@ -111,7 +115,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
                 autoComplete="off"
                 id="pokemonName"
                 placeholder="Charizard, Pikachu, etc."
-                onChange={(e) => setSearchText(e.target.value)}
+                onChange={handleSearchChange} 
               />
             </div>
           </div>
@@ -147,7 +151,15 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
           )}
           <div className="max-w-5xl mt-5 rounded-xl mx-[10%] bg-white flex flex-col justify-center min-h-[calc(100vh-10rem)]">
             <ul className="flex flex-wrap justify-center m-3">
-              {renderPokemonList()}
+            {filteredPokemonList.map((pokemon: PokemonDetails) => (
+              <PokemonCard
+                key={pokemon.id}
+                id={pokemon.id}
+                name={pokemon.name}
+                types={pokemon.types}
+                sprite={pokemon.sprite}
+              />
+            ))}
               <div className="clear-both"></div>
             </ul>
           </div>
