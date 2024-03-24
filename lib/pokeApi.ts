@@ -2,7 +2,7 @@
 import { PokemonData, TypeData, PokemonType } from '../types/pokemonTypes';
 
 export async function getPokemonList() {
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=700&offset=0");
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0");
     const data = await response.json();
     return data.results;
 }

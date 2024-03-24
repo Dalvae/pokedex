@@ -125,7 +125,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
                     currentPage <= 1 ? "ml-auto" : ""
                   }`}
                   onClick={() => paginate(currentPage + 1)}
-                  // disabled={
+                  //  disabled={
                   //   currentPage * pokemonsPerPage >= filteredPokemonList.length // Cambiado a filteredPokemonList
                   // }
                 >
