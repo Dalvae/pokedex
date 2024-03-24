@@ -1,12 +1,14 @@
 // const POKEMON_API = "https://pokeapi.co/api/v2/";
 import { PokemonData, TypeData, PokemonType } from '../types/pokemonTypes';
 
-export async function getPokemonList() {
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0");
+export async function getPokemonList(page: number, limit: number) {
+    const offset = (page - 1) * limit;
+    const response = await fetch(
+      `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
+    );
     const data = await response.json();
     return data.results;
-}
-
+  }
 
 function getFirstAvailableSprite(sprites: any): string {
     const generationOrder = [
