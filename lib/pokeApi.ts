@@ -29,33 +29,10 @@ function getFirstAvailableSprite(sprites: any): string {
   export async function getPokemon(id: number): Promise<PokemonData> {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
     const pokemonData = await response.json();
-    const speciesResponse = await fetch(pokemonData.species.url);
-    const speciesData = await speciesResponse.json();
   
-    try {
-      const types = pokemonData.types.map((t: any) => t.type.name);
-      const sprite = getFirstAvailableSprite(pokemonData.sprites);
-      const description = speciesData.flavor_text_entries.find((entry: any) => entry.language.name === "en").flavor_text;
-      const category = speciesData.genera.find((genus : any) => genus.language.name === "en").genus;
-  
-      let weaknesses: string[] = [];
-      for (const typeInfo of pokemonData.types) {
-        const typeResponse = await fetch(typeInfo.type.url);
-        const typeData: TypeData = await typeResponse.json();
-        const typeWeaknesses = typeData.damage_relations.double_damage_from.map(type => type.name);
-        weaknesses = [...new Set([...weaknesses, ...typeWeaknesses])];
-      }
-  
-      return {
-        ...pokemonData,
-        types,
-        sprite,
-        description,
-        category,
-        weaknesses,
-      };
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-      throw new Error("Failed to parse response as JSON");
-    }
+    return {
+      ...pokemonData,
+      sprite: getFirstAvailableSprite(pokemonData.sprites),
+      types: pokemonData.types.map((t: any) => t.type.name), 
+    };
   }

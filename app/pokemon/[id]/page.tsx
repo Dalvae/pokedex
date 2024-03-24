@@ -103,8 +103,9 @@ export default async function PokemonPage({
                       typeColors[type as keyof typeof typeColors] ||
                       "bg-gray-400"
                     } w-[80px]`}
-                  >
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  > {typeof type === 'string'
+                  ? `${type.charAt(0).toUpperCase()}${type.slice(1)}`
+                  : 'Unknown'}
                   </span>
                 ))}
             </div>
