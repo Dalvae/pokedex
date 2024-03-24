@@ -73,20 +73,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
               />
             </div>
           </div>
-          <div className="max-w-5xl  mt-5 rounded-xl mx-[10%] bg-white flex flex-col justify-center min-h-[calc(100vh-10rem)]">
-            <ul className="flex flex-wrap justify-center m-3">
-              {filteredPokemonList.map((pokemon: PokemonDetails) => (
-                <PokemonCard
-                  key={pokemon.id}
-                  id={pokemon.id}
-                  name={pokemon.name}
-                  types={pokemon.types}
-                  sprite={pokemon.sprite}
-                />
-              ))}
-              <div className="clear-both"></div>
-            </ul>
-            <div className="pagination mb-4 w-full flex justify-center items-center">
+          <div className="pagination my-6 w-full flex justify-center items-center">
               <div className="flex justify-between items-center w-3/4 mx-auto">
                 {currentPage > 1 && (
                   <button
@@ -101,11 +88,26 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
                     currentPage <= 1 ? "ml-auto" : ""
                   }`}
                   onClick={() => paginate(currentPage + 1)}
+                  disabled={currentPage * pokemonsPerPage >= 151}
                 >
                   Next
                 </button>
               </div>
             </div>
+          <div className="max-w-5xl  mt-5 rounded-xl mx-[10%] bg-white flex flex-col justify-center min-h-[calc(100vh-10rem)]">
+            <ul className="flex flex-wrap justify-center m-3">
+              {filteredPokemonList.map((pokemon: PokemonDetails) => (
+                <PokemonCard
+                  key={pokemon.id}
+                  id={pokemon.id}
+                  name={pokemon.name}
+                  types={pokemon.types}
+                  sprite={pokemon.sprite}
+                />
+              ))}
+              <div className="clear-both"></div>
+            </ul>
+         
           </div>
         </div>
       </div>
