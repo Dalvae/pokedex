@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface PokemonCardProps {
   id: number;
@@ -41,13 +42,17 @@ export function PokemonCard({ id, name, types, sprite }: PokemonCardProps) {
         className="block rounded-lg m-3 p-5  transition-transform ease-in-out duration-200 hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-black focus:ring-opacity-100"
         key={id}
       >
-        <img
-          loading="lazy"
-          src={sprite}
-          alt={name}
-          className="bg-gray-200   rounded-md w-full aspect-square"
+        <Image
+          src={sprite} 
+          alt={name} 
+          width={200} 
+          height={200} 
+          layout="responsive" 
+          className="bg-gray-200 rounded-md aspect-square" 
         />
-        <span className="text-sm m-2 font-bold text-gray-400 font-flexo-bold mx-4">N.° {formattedId}</span>
+        <span className="text-sm m-2 font-bold text-gray-400 font-flexo-bold mx-4">
+          N.° {formattedId}
+        </span>
         <h2 className="text-xl font-semibold text-gray-700 font-flexo-demi mt-3 mx-4 ">
           {name.charAt(0).toUpperCase() + name.slice(1)}
         </h2>
@@ -56,7 +61,10 @@ export function PokemonCard({ id, name, types, sprite }: PokemonCardProps) {
             types.map((type) => (
               <span
                 key={type}
-                className={`inline-block text-center px-3  text-xs rounded-sm font-flexo-medium ${typeColors[type as keyof typeof typeColors] || "bg-gray-400" } w-[80px]`}              >
+                className={`inline-block text-center px-3  text-xs rounded-sm font-flexo-medium ${
+                  typeColors[type as keyof typeof typeColors] || "bg-gray-400"
+                } w-[80px]`}
+              >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </span>
             ))}
