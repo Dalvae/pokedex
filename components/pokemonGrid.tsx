@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { PokemonCard } from "./pokemonCard";
 import { Input } from "@/components/ui/input";
 import { getPokemon } from "@/lib/pokeApi";
+import { SimplePokemonDetails, PokemonData } from "@/types/pokemonTypes";
 
 interface PokemonGridProps {
   pokemonList: any[];
@@ -19,10 +20,10 @@ interface PokemonDetails {
 export function PokemonGrid({ pokemonList }: PokemonGridProps) {
   const [searchText, setSearchText] = useState("");
   const [detailedPokemonList, setDetailedPokemonList] = useState<
-    PokemonDetails[]
+  PokemonData[]
   >([]);
   const [filteredPokemonList, setFilteredPokemonList] = useState<
-    PokemonDetails[]
+  PokemonData[]
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
@@ -33,12 +34,12 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
     const fetchDetails = async () => {
       const details = await Promise.all(
         pokemonList.map((pokemon, index) => getPokemon(index + 1))
-      );
-      setDetailedPokemonList(details);
-    };
-
-    fetchDetails();
-  }, [pokemonList]);
+        );
+        setDetailedPokemonList(details);
+      };
+      fetchDetails();
+    }, [pokemonList]);
+  
   //Handle Resize
 
   useEffect(() => {
@@ -151,7 +152,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
           )}
           <div className="max-w-5xl mt-5 rounded-xl mx-[10%] bg-white flex flex-col justify-center min-h-[calc(100vh-10rem)]">
             <ul className="flex flex-wrap justify-center m-3">
-            {filteredPokemonList.map((pokemon: PokemonDetails) => (
+            {filteredPokemonList.map((pokemon: PokemonData) => (
               <PokemonCard
                 key={pokemon.id}
                 id={pokemon.id}
