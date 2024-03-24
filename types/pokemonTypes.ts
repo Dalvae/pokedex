@@ -39,6 +39,7 @@ export interface TypeRelation {
   export interface SimplePokemonDetails {
     id: number;
     name: string;
+    url: string;
     types: string[];
     sprite: string; 
   }

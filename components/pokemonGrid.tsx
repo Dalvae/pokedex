@@ -1,50 +1,35 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { PokemonCard } from "./pokemonCard";
 import { Input } from "@/components/ui/input";
-import { getPokemon } from "@/lib/pokeApi";
-import { SimplePokemonDetails, PokemonData } from "@/types/pokemonTypes";
+import { SimplePokemonDetails } from "@/types/pokemonTypes";
 
 interface PokemonGridProps {
-  pokemonList: any[];
-}
-
-interface PokemonDetails {
-  id: number;
-  name: string;
-  types: string[];
-  sprite: string;
+  pokemonList: SimplePokemonDetails[];
 }
 
 export function PokemonGrid({ pokemonList }: PokemonGridProps) {
   const [searchText, setSearchText] = useState("");
-  const [filteredPokemonList, setFilteredPokemonList] = useState<PokemonData[]>(
+  const [filteredPokemonList, setFilteredPokemonList] = useState<SimplePokemonDetails[]>(
     []
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
   const pokemonsPerPage = 12;
 
-  // Detalles de pokemon
   useEffect(() => {
     function filterPokemon() {
-      const startIndex = (currentPage - 1) * pokemonsPerPage;
       const filtered = pokemonList.filter((pokemon) =>
         pokemon.name.toLowerCase().includes(searchText.toLowerCase())
       );
-
-      const paginatedItems = isMobile
-        ? filtered
-        : filtered.slice(startIndex, startIndex + pokemonsPerPage);
-      setFilteredPokemonList(paginatedItems);
+      setFilteredPokemonList(filtered);
     }
 
     filterPokemon();
-  }, [searchText, pokemonList, currentPage, isMobile]);
+  }, [searchText, pokemonList]);
 
-  //Handle Resize
-
+  // Handle Resize
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 900);
@@ -54,7 +39,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  //Handle Scoll
+  // Handle Scroll
   useEffect(() => {
     const handleScroll = () => {
       if (!isMobile || searchText.length > 0) {
@@ -66,24 +51,37 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
       const clientHeight = document.documentElement.clientHeight;
 
       if (scrollTop + clientHeight >= scrollHeight - 200) {
-        setCurrentPage((prevPage) => prevPage + 1);
+        setCurrentPage((prevPage) => {
+          const nextPage = prevPage + 1;
+          const startIndex = (nextPage - 1) * pokemonsPerPage;
+          const endIndex = startIndex + pokemonsPerPage;
+          if (endIndex < filteredPokemonList.length) {
+            return nextPage;
+          }
+          return prevPage;
+        });
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isMobile, currentPage, searchText]);
+  }, [isMobile, searchText, filteredPokemonList]);
 
-  //Busqueda
-
-  //Reestablece la paginacion cuando hay texto  en el buscador
-
+  // Handle Search Change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
     setCurrentPage(1);
   };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Get current pokemons based on pagination or infinite scroll
+  const indexOfLastPokemon = currentPage * pokemonsPerPage;
+  const indexOfFirstPokemon = indexOfLastPokemon - pokemonsPerPage;
+  const currentPokemons = filteredPokemonList.slice(
+    indexOfFirstPokemon,
+    indexOfLastPokemon
+  );
 
   return (
     <>
@@ -125,9 +123,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
                     currentPage <= 1 ? "ml-auto" : ""
                   }`}
                   onClick={() => paginate(currentPage + 1)}
-                  //  disabled={
-                  //   currentPage * pokemonsPerPage >= filteredPokemonList.length // Cambiado a filteredPokemonList
-                  // }
+                  disabled={indexOfLastPokemon >= filteredPokemonList.length}
                 >
                   Next
                 </button>
@@ -136,15 +132,17 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
           )}
           <div className="max-w-5xl mt-5 rounded-xl mx-[10%] bg-white flex flex-col justify-center min-h-[calc(100vh-10rem)]">
             <ul className="flex flex-wrap justify-center m-3">
-              {filteredPokemonList.map((pokemon: PokemonData) => (
-                <PokemonCard
-                  key={pokemon.id}
-                  id={pokemon.id}
-                  name={pokemon.name}
-                  types={pokemon.types}
-                  sprite={pokemon.sprite}
-                />
-              ))}
+              {currentPokemons.map((pokemon) => {
+                const urlParts = pokemon.url.split('/');
+                const pokemonId = parseInt(urlParts[urlParts.length - 2]);
+                return (
+                  <PokemonCard
+                    key={pokemon.name}
+                    id={pokemonId}
+                    name={pokemon.name}
+                  />
+                );
+              })}
               <div className="clear-both"></div>
             </ul>
           </div>
