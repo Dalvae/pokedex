@@ -35,84 +35,92 @@ export default async function PokemonPage({ params }: PokemonPageProps) {
   const heightInMeters = pokemonData.height / 10;
 
   return (
-    <div
-      className="bg-cover min-h-screen flex flex-col justify-between"
-      style={{
-        background: `#fff url("https://assets.pokemon.com/static2/_ui/img/chrome/container_bg.png")`,
-      }}
-    >
+    <div className=" min-h-screen "
+    style={{
+      background: `#fff url("https://assets.pokemon.com/static2/_ui/img/chrome/container_bg.png")`,
+    }}>
       <ButtonPrev id={pokemonId} />
       <ButtonNext id={pokemonId} />
-      <div className="container mx-auto max-w-screen-xl overflow-hidden relative">
-        <div className="max-w-5xl mt-10 rounded-xl mx-[10%] bg-white flex flex-col justify-center min-h-[calc(100vh-10rem)]">
+      <div className="container mx-auto  py-8">
+        <div className="flex justify-center">
+        <div className="bg-white rounded-lg shadow-lg p-6 mx-[10%] max-w-5xl w-full ">
           <div className="text-center flex justify-center items-baseline">
-            <h1 className="text-4xl text-bold mr-4">
+            <h1 className="text-4xl font-flexo-demi mr-4 font-bold mb-2">
               {pokemonData.name.charAt(0).toUpperCase() +
                 pokemonData.name.slice(1)}
             </h1>
-            <span className="text-4xl font-bold text-gray-400">
+            <span className="text-4xl font-flexo-demi font-bold text-gray-500">
               N.° {formattedId}
             </span>
           </div>
-          <div className="m-4 flex justify-center items-center max-w-[200]">
-            <Image
-              src={pokemonData.sprite}
-              alt={pokemonData.name}
-              width={300}
-              height={300}
-              className="bg-gray-200 rounded-md aspect-square"
-            />
+          <div className="flex justify-center my-8">
+              <Image
+                src={pokemonData.sprite}
+                alt={pokemonData.name}
+                width={200}
+                height={200}
+                className="mx-auto bg-gray-200 rounded-md m-6"
+              />
           </div>
-          <p>{pokemonData.description}</p>
-          <p>Weight: {weightInKg} kg</p>
-          <p>Height: {heightInMeters} m</p>
-          <p>Category: {pokemonData.category}</p>
-          <div className="flex-col">
-            {pokemonData.stats.map((statObject: any) => {
-              const statName = statObject.stat.name;
-              const statValue = statObject.base_stat;
-              return (
-                <div
-                  className="flex items-stretch"
-                  style={{ width: "500px" }}
-                  key={statName}
-                >
-                  <h3 className="p-2 w-2/4">
-                    {statName}: {statValue}
-                  </h3>
-                  {/* {<Progress className="w-2/4 m-auto" value={statValue} /> } */}
-                </div>
-              );
-            })}
+          <div className="text-center">
+            <p className="text-lg mb-4">{pokemonData.description}</p>
+            <p className="mb-2">
+              <span className="font-bold">Weight:</span> {weightInKg} kg
+            </p>
+            <p className="mb-2">
+              <span className="font-bold">Height:</span> {heightInMeters} m
+            </p>
+            <p className="mb-6">
+              <span className="font-bold">Category:</span> {pokemonData.category}
+            </p>
+            <div className="flex flex-wrap justify-center mx-[20%]">
+              {pokemonData.stats.map((statObject: any) => {
+                const statName = statObject.stat.name;
+                const statValue = statObject.base_stat;
+                return (
+                  <div key={statName} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
+                    <div className="bg-gray-200 rounded-lg p-4">
+                      <h3 className="font-bold mb-2">{statName}</h3>
+                      <p>{statValue}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mb-6">
+              <h3 className="text-xl font-bold mb-2">Type</h3>
+              <div className="flex justify-center space-x-2">
+                {pokemonData.types.map((type) => (
+                  <span
+                    key={type}
+                    className={`inline-block px-10 rounded-md text-sm ${
+                      typeColors[type as keyof typeof typeColors] || "bg-gray-400"
+                    }`}
+                  >
+                    {typeof type === "string"
+                      ? `${type.charAt(0).toUpperCase()}${type.slice(1)}`
+                      : "Unknown"}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold mb-2">Weakness</h3>
+              <div className="flex justify-center space-x-2">
+                {pokemonData.weaknesses?.map((type) => (
+                  <span
+                    key={type}
+                    className={`inline-block px-4 py-2 rounded-full text-sm ${
+                      typeColors[type as keyof typeof typeColors] || "bg-gray-400"
+                    }`}
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
-          <h3>Type</h3>
-          <div className="flex gap-1 mx-4">
-            {pokemonData.types.map((type) => (
-              <span
-                key={type}
-                className={`inline-block text-center px-3 text-xs rounded-sm font-flexo-medium ${
-                  typeColors[type as keyof typeof typeColors] || "bg-gray-400"
-                } w-[80px]`}
-              >
-                {typeof type === "string"
-                  ? `${type.charAt(0).toUpperCase()}${type.slice(1)}`
-                  : "Unknown"}
-              </span>
-            ))}
-          </div>
-          <h3>Weakness</h3>
-          <div className="flex gap-1 mx-4">
-            {pokemonData.weaknesses?.map((type) => (
-              <span
-                key={type}
-                className={`inline-block text-center px-3 text-xs rounded-sm font-flexo-medium ${
-                  typeColors[type as keyof typeof typeColors] || "bg-gray-400"
-                } w-[80px]`}
-              >
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </span>
-            ))}
-          </div>
+        </div>
         </div>
       </div>
     </div>
