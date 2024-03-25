@@ -16,26 +16,28 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
-  const pokemonsPerPage = 12;
+  const [pokemonsPerPage, setPokemonsPerPage] = useState(8);
 
   // Filtrar y paginar la lista de Pokémon
   useEffect(() => {
-    function filterAndPaginatePokemon() {
-      const filtered = pokemonList.filter((pokemon) =>
-        pokemon.name.toLowerCase().includes(searchText.toLowerCase())
-      );
-      const startIndex = (currentPage - 1) * pokemonsPerPage;
-      const endIndex = startIndex + pokemonsPerPage;
-      setLoadedPokemonList(filtered.slice(startIndex, endIndex));
-    }
-
-    filterAndPaginatePokemon();
-  }, [searchText, pokemonList, currentPage]);
+    const startIndex = (currentPage - 1) * pokemonsPerPage;
+    const endIndex = startIndex + pokemonsPerPage;
+    const filtered = pokemonList.filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setLoadedPokemonList(filtered.slice(startIndex, endIndex));
+  }, [pokemonsPerPage, currentPage, searchText, pokemonList]);
 
   // Detectar cambios en el tamaño de la ventana
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 900);
+
+      if (window.innerWidth >= 1200) {
+        setPokemonsPerPage(8);
+      } else if (window.innerWidth >= 900) {
+        setPokemonsPerPage(6);
+      }
     };
 
     handleResize();
@@ -85,10 +87,6 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
   // Manejar la paginación
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
   };
 
   return (
@@ -104,7 +102,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
             <h3 className="text-2xl py-5 text-center">
               Search For Your Pokemon!
             </h3>
-            <div className="w-full max-w-sm mx-auto items-center gap-1.5">
+            <div className="w-full sm:max-w-sm mx-auto px-[10%] sm:px-0 items-center gap-1.5">
               <Input
                 type="text"
                 value={searchText}
