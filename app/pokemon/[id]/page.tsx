@@ -16,9 +16,20 @@ export default async function PokemonPage({ params }: PokemonPageProps) {
   const typeColors = {
     fire: "bg-red-500 text-white",
     water: "bg-blue-500 text-white",
-    // ... (resto de los colores de tipo)
+    grass: "bg-green-500 text-white",
+    electric: "bg-yellow-500 text-white",
+    psychic: "bg-pink-500 text-white",
+    ice: "bg-cyan-500 text-white",
+    dragon: "bg-indigo-500 text-white",
+    dark: "bg-gray-800 text-white",
+    fairy: "bg-pink-200 text-white",
+    bug: "bg-green-300 text-white",
+    poison: "bg-purple-400 text-white",
+    stone: "bg-brown-400 text-white",
+    rock: "bg-yellow-800 text-white",
+    flying: "bg-sky-400 text-white",
+    ground: "bg-yellow-200 text-black",
   };
-
   const formattedId = pokemonId.toString().padStart(4, "0");
   const weightInKg = pokemonData.weight / 10;
   const heightInMeters = pokemonData.height / 10;
