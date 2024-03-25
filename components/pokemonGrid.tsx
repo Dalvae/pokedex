@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { PokemonCard } from "./pokemonCard";
 import { Input } from "@/components/ui/input";
 import { SimplePokemonDetails } from "@/types/pokemonTypes";
+import { PokemonContainer } from '@/components/PokemonContainer';
+
 
 interface PokemonGridProps {
   pokemonList: SimplePokemonDetails[];
@@ -97,7 +99,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
           background: `#fff url("https://assets.pokemon.com/static2/_ui/img/chrome/container_bg.png")`,
         }}
       >
-        <div className="container mx-auto max-w-screen-xl overflow-hidden relative">
+        <div className="container mx-auto max-w-screen-xl  relative">
           <div>
             <h3 className="text-2xl py-5 text-center">
               Search For Your Pokemon!
@@ -136,22 +138,22 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
               </div>
             </div>
           )}
-          <div className="max-w-5xl mt-5 rounded-xl mx-[10%] bg-white flex-start  min-h-[70vh] justify-center ">
-            <ul className="flex flex-wrap justify-center m-3">
-              {loadedPokemonList.map((pokemon) => {
-                const urlParts = pokemon.url.split("/");
-                const pokemonId = parseInt(urlParts[urlParts.length - 2]);
-                return (
-                  <PokemonCard
-                    key={pokemon.name}
-                    id={pokemonId}
-                    name={pokemon.name}
-                  />
-                );
-              })}
-              <div className="clear-both"></div>
-            </ul>
-          </div>
+        <PokemonContainer>
+          <ul className="flex flex-wrap justify-center m-3">
+            {loadedPokemonList.map((pokemon) => {
+              const urlParts = pokemon.url.split("/");
+              const pokemonId = parseInt(urlParts[urlParts.length - 2]);
+              return (
+                <PokemonCard
+                  key={pokemon.name}
+                  id={pokemonId}
+                  name={pokemon.name}
+                />
+              );
+            })}
+            <div className="clear-both"></div>
+          </ul>
+        </PokemonContainer>
         </div>
       </div>
     </>
