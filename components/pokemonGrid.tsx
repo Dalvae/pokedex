@@ -11,77 +11,85 @@ interface PokemonGridProps {
 
 export function PokemonGrid({ pokemonList }: PokemonGridProps) {
   const [searchText, setSearchText] = useState("");
-  const [filteredPokemonList, setFilteredPokemonList] = useState<SimplePokemonDetails[]>(
-    []
-  );
+  const [loadedPokemonList, setLoadedPokemonList] = useState<
+    SimplePokemonDetails[]
+  >([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
   const pokemonsPerPage = 12;
 
+  // Filtrar y paginar la lista de Pokémon
   useEffect(() => {
-    function filterPokemon() {
+    function filterAndPaginatePokemon() {
       const filtered = pokemonList.filter((pokemon) =>
         pokemon.name.toLowerCase().includes(searchText.toLowerCase())
       );
-      setFilteredPokemonList(filtered);
+      const startIndex = (currentPage - 1) * pokemonsPerPage;
+      const endIndex = startIndex + pokemonsPerPage;
+      setLoadedPokemonList(filtered.slice(startIndex, endIndex));
     }
 
-    filterPokemon();
-  }, [searchText, pokemonList]);
+    filterAndPaginatePokemon();
+  }, [searchText, pokemonList, currentPage]);
 
-  // Handle Resize
+  // Detectar cambios en el tamaño de la ventana
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 900);
     };
+
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Handle Scroll
+  // Manejar el scroll infinito en dispositivos móviles
   useEffect(() => {
     const handleScroll = () => {
       if (!isMobile || searchText.length > 0) {
         return;
       }
 
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = document.documentElement.scrollTop;
-      const clientHeight = document.documentElement.clientHeight;
+      const { scrollHeight, scrollTop, clientHeight } =
+        document.documentElement;
 
-      if (scrollTop + clientHeight >= scrollHeight - 200) {
-        setCurrentPage((prevPage) => {
-          const nextPage = prevPage + 1;
-          const startIndex = (nextPage - 1) * pokemonsPerPage;
-          const endIndex = startIndex + pokemonsPerPage;
-          if (endIndex < filteredPokemonList.length) {
-            return nextPage;
-          }
-          return prevPage;
-        });
+      if (scrollTop + clientHeight >= scrollHeight - 500) {
+        const morePokemonsNeeded =
+          loadedPokemonList.length + pokemonsPerPage > pokemonList.length;
+        if (!morePokemonsNeeded) {
+          const nextPokemons = pokemonList.slice(
+            loadedPokemonList.length,
+            loadedPokemonList.length + pokemonsPerPage
+          );
+          setLoadedPokemonList((prev) => [...prev, ...nextPokemons]);
+        }
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isMobile, searchText, filteredPokemonList]);
+  }, [isMobile, searchText, loadedPokemonList, pokemonList]);
 
-  // Handle Search Change
+  // Manejar cambios en el texto de búsqueda
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reiniciar la página actual a 1 cuando se realiza una nueva búsqueda
   };
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  // Get current pokemons based on pagination or infinite scroll
-  const indexOfLastPokemon = currentPage * pokemonsPerPage;
-  const indexOfFirstPokemon = indexOfLastPokemon - pokemonsPerPage;
-  const currentPokemons = filteredPokemonList.slice(
-    indexOfFirstPokemon,
-    indexOfLastPokemon
+  // Calcular el total de páginas y la disponibilidad de la siguiente página
+  const filteredPokemons = pokemonList.filter((pokemon) =>
+    pokemon.name.toLowerCase().includes(searchText.toLowerCase())
   );
+  const totalPokemons = filteredPokemons.length;
+  const totalPages = Math.ceil(totalPokemons / pokemonsPerPage);
+  const isNextPageAvailable = currentPage < totalPages;
+  // Manejar la paginación
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <>
@@ -123,7 +131,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
                     currentPage <= 1 ? "ml-auto" : ""
                   }`}
                   onClick={() => paginate(currentPage + 1)}
-                  disabled={indexOfLastPokemon >= filteredPokemonList.length}
+                  disabled={!isNextPageAvailable}
                 >
                   Next
                 </button>
@@ -132,8 +140,8 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
           )}
           <div className="max-w-5xl mt-5 rounded-xl mx-[10%] bg-white flex flex-col justify-center min-h-[calc(100vh-10rem)]">
             <ul className="flex flex-wrap justify-center m-3">
-              {currentPokemons.map((pokemon) => {
-                const urlParts = pokemon.url.split('/');
+              {loadedPokemonList.map((pokemon) => {
+                const urlParts = pokemon.url.split("/");
                 const pokemonId = parseInt(urlParts[urlParts.length - 2]);
                 return (
                   <PokemonCard
