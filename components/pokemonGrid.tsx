@@ -136,7 +136,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
               </div>
             </div>
           )}
-          <div className="max-w-5xl mt-5 rounded-xl mx-[10%] bg-white flex-start justify-center ">
+          <div className="max-w-5xl mt-5 rounded-xl mx-[10%] bg-white flex-start  min-h-[70vh] justify-center ">
             <ul className="flex flex-wrap justify-center m-3">
               {loadedPokemonList.map((pokemon) => {
                 const urlParts = pokemon.url.split("/");
