@@ -3,7 +3,7 @@ import PokeballIcon from "@/public/icons/pokeball";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#FFCE31] flex justify-center items-center p-2.5 bottom-0 left-0 right-0 border-t-4 border-blue-500 z-50">
+    <footer className="bg-[#FFCE31] flex justify-center items-center p-2.5 bottom-0 left-0 right-0 border-t-4 border-blue-600 z-50">
       <div className="flex justify-between items-center w-full max-w-5xl mx-[10%]">
         <div className="max-w-[100px]">
           <PokeballIcon />
