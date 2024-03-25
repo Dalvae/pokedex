@@ -2,6 +2,7 @@ import { getPokemon } from "@/lib/pokeApi";
 import { ButtonNext, ButtonPrev } from "@/components/ui/buttonsNavigation";
 import Image from "next/image";
 import { PokemonData } from "@/types/pokemonTypes";
+import { TypePills } from "@/components/ui/TypePills";
 
 interface PokemonPageProps {
   params: {
@@ -12,24 +13,6 @@ interface PokemonPageProps {
 export default async function PokemonPage({ params }: PokemonPageProps) {
   const pokemonId = parseInt(params.id, 10);
   const pokemonData: PokemonData = await getPokemon(pokemonId);
-
-  const typeColors = {
-    fire: "bg-red-500 text-white",
-    water: "bg-blue-500 text-white",
-    grass: "bg-green-500 text-white",
-    electric: "bg-yellow-500 text-white",
-    psychic: "bg-pink-500 text-white",
-    ice: "bg-cyan-500 text-white",
-    dragon: "bg-indigo-500 text-white",
-    dark: "bg-gray-800 text-white",
-    fairy: "bg-pink-200 text-white",
-    bug: "bg-green-300 text-white",
-    poison: "bg-purple-400 text-white",
-    stone: "bg-brown-400 text-white",
-    rock: "bg-yellow-800 text-white",
-    flying: "bg-sky-400 text-white",
-    ground: "bg-yellow-200 text-black",
-  };
   const formattedId = pokemonId.toString().padStart(4, "0");
   const weightInKg = pokemonData.weight / 10;
   const heightInMeters = pokemonData.height / 10;
@@ -90,33 +73,13 @@ export default async function PokemonPage({ params }: PokemonPageProps) {
             <div className="mb-6">
               <h3 className="text-xl font-bold mb-2">Type</h3>
               <div className="flex justify-center space-x-2">
-                {pokemonData.types.map((type) => (
-                  <span
-                    key={type}
-                    className={`inline-block px-10 rounded-md text-sm ${
-                      typeColors[type as keyof typeof typeColors] || "bg-gray-400"
-                    }`}
-                  >
-                    {typeof type === "string"
-                      ? `${type.charAt(0).toUpperCase()}${type.slice(1)}`
-                      : "Unknown"}
-                  </span>
-                ))}
+              <TypePills types={pokemonData.types} />
               </div>
             </div>
             <div>
               <h3 className="text-xl font-bold mb-2">Weakness</h3>
               <div className="flex justify-center space-x-2">
-                {pokemonData.weaknesses?.map((type) => (
-                  <span
-                    key={type}
-                    className={`inline-block px-4 py-2 rounded-full text-sm ${
-                      typeColors[type as keyof typeof typeColors] || "bg-gray-400"
-                    }`}
-                  >
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
-                  </span>
-                ))}
+              {/* <TypePills types={pokemonData.weaknesses}/> */}
               </div>
             </div>
           </div>
