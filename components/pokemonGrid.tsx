@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { PokemonCard } from "./pokemonCard";
 import { Input } from "@/components/ui/input";
 import { SimplePokemonDetails } from "@/types/pokemonTypes";
-import { PokemonContainer } from '@/components/PokemonContainer';
-
+import { PokemonContainer } from "@/components/PokemonContainer";
 
 interface PokemonGridProps {
   pokemonList: SimplePokemonDetails[];
@@ -99,61 +98,59 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
           background: `#fff url("https://assets.pokemon.com/static2/_ui/img/chrome/container_bg.png")`,
         }}
       >
-        <div className="container mx-auto max-w-screen-xl  relative">
-          <div>
-            <h3 className="text-2xl py-5 text-center">
-              Search For Your Pokemon!
-            </h3>
-            <div className="w-full sm:max-w-sm mx-auto px-[10%] sm:px-0 items-center gap-1.5">
+        <div className="container mx-auto max-w-screen-xl relative">
+          <div
+            className={`flex justify-between items-center mt-6 max-w-5xl mx-[10%] ${
+              !isMobile ? "w-full" : ""
+            }`}
+          >
+            {!isMobile && currentPage > 1 ? (
+              <button
+                className="bg-white hover:bg-gray-200 text-gray-800 font-bold py-1 px-4 rounded border-double border-4 border-black pagination-button w-32"
+                onClick={() => paginate(currentPage - 1)}
+              >
+                Previous
+              </button>
+            ) : (
+              <div className="w-32"></div>
+            )}
+            <div className="w-full sm:max-w-sm mx-auto px-[10%] sm:px-0">
               <Input
                 type="text"
                 value={searchText}
                 autoComplete="off"
                 id="pokemonName"
-                placeholder="Charizard, Pikachu, etc."
+                placeholder="Search for your Pokemon"
                 onChange={handleSearchChange}
+                className="border-4 border-black border-double rounded-md"
               />
             </div>
+            {!isMobile && (
+              <button
+                className=" bg-white hover:bg-gray-200 text-gray-800 font-bold py-1 px-4 rounded border-double border-4 border-black pagination-button w-32"
+                onClick={() => paginate(currentPage + 1)}
+                disabled={!isNextPageAvailable}
+              >
+                Next
+              </button>
+            )}
           </div>
-          {!isMobile && (
-            <div className="pagination my-6 w-full flex justify-center items-center">
-              <div className="flex justify-between items-center w-3/4 mx-auto">
-                {currentPage > 1 && (
-                  <button
-                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
-                    onClick={() => paginate(currentPage - 1)}
-                  >
-                    Previous
-                  </button>
-                )}
-                <button
-                  className={`bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded ${
-                    currentPage <= 1 ? "ml-auto" : ""
-                  }`}
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={!isNextPageAvailable}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
-        <PokemonContainer>
-          <ul className="flex flex-wrap justify-center m-3">
-            {loadedPokemonList.map((pokemon) => {
-              const urlParts = pokemon.url.split("/");
-              const pokemonId = parseInt(urlParts[urlParts.length - 2]);
-              return (
-                <PokemonCard
-                  key={pokemon.name}
-                  id={pokemonId}
-                  name={pokemon.name}
-                />
-              );
-            })}
-            <div className="clear-both"></div>
-          </ul>
-        </PokemonContainer>
+          <PokemonContainer>
+            <ul className="flex flex-wrap justify-center m-3">
+              {loadedPokemonList.map((pokemon) => {
+                const urlParts = pokemon.url.split("/");
+                const pokemonId = parseInt(urlParts[urlParts.length - 2]);
+                return (
+                  <PokemonCard
+                    key={pokemon.name}
+                    id={pokemonId}
+                    name={pokemon.name}
+                  />
+                );
+              })}
+              <div className="clear-both"></div>
+            </ul>
+          </PokemonContainer>
         </div>
       </div>
     </>
