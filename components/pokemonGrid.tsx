@@ -100,19 +100,19 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
       >
         <div className="container mx-auto max-w-screen-xl relative">
           <div
-            className={`flex justify-between items-center mt-6 max-w-5xl mx-[10%] ${
-              !isMobile ? "w-full" : ""
+            className={`flex justify-between items-center mt-6 mx-[10%] ${
+              !isMobile ? "max-w-5xl" : ""
             }`}
           >
             {!isMobile && currentPage > 1 ? (
               <button
-                className="bg-white hover:bg-gray-200 text-gray-800 font-bold py-1 px-4 rounded border-double border-4 border-black pagination-button w-32"
+                className="bg-white hover:bg-gray-200 text-gray-800 font-bold py-1 px-4 rounded border-double border-4 border-black pagination-button w-32 sm:block hidden"
                 onClick={() => paginate(currentPage - 1)}
               >
                 Previous
               </button>
             ) : (
-              <div className="w-32"></div>
+              <div className="w-32 sm:block hidden"></div>
             )}
             <div className="w-full sm:max-w-sm mx-auto px-[10%] sm:px-0">
               <Input
@@ -127,7 +127,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
             </div>
             {!isMobile && (
               <button
-                className=" bg-white hover:bg-gray-200 text-gray-800 font-bold py-1 px-4 rounded border-double border-4 border-black pagination-button w-32"
+                className="bg-white hover:bg-gray-200 text-gray-800 font-bold py-1 px-4 rounded border-double border-4 border-black pagination-button w-32 sm:block hidden"
                 onClick={() => paginate(currentPage + 1)}
                 disabled={!isNextPageAvailable}
               >
