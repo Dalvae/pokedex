@@ -1,5 +1,6 @@
-'use client';
-import { useRouter } from 'next/navigation';
+"use client";
+
+import { useRouter } from "next/navigation";
 
 export function ButtonNext({ id }: { id: number }) {
   const router = useRouter();
@@ -10,7 +11,10 @@ export function ButtonNext({ id }: { id: number }) {
   };
 
   return (
-    <button onClick={handleNextPokemon} className="bg-gray-300 hover:bg-gray-400 text-black py-2 px-4 rounded-full fixed top-1/5 right-[10%] mr-2 z-50">
+    <button
+      onClick={handleNextPokemon}
+      className="bg-white hover:bg-gray-200 text-gray-800 py-1 px-1 rounded fixed lg:top-28 top-1/2 right-[5%] transform -translate-y-1/2 ml-2 z-50 border-double border-4 border-black sm:right-[21%]"
+    >
       Next Pokemon
     </button>
   );
@@ -21,11 +25,16 @@ export function ButtonPrev({ id }: { id: number }) {
 
   const handlePrevPokemon = () => {
     const prevId = +id - 1;
-    router.push(`/pokemon/${prevId}`);
+    if (prevId >= 1) {
+      router.push(`/pokemon/${prevId}`);
+    }
   };
 
   return (
-    <button onClick={handlePrevPokemon} className="bg-gray-300 hover:bg-gray-400 text-black py-2 px-4 rounded-full fixed top-1/5 left-[10%] ml-2 z-50">
+    <button
+      onClick={handlePrevPokemon}
+      className="bg-white hover:bg-gray-200 text-gray-800 py-1 px-1 rounded fixed lg:top-28 top-1/2 left-[5%] transform -translate-y-1/2 ml-2 z-50 border-double border-4 border-black sm:left-[20%]"
+    >
       Previous Pokemon
     </button>
   );
