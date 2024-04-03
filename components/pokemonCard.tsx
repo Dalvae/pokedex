@@ -34,7 +34,8 @@ export function PokemonCard({ id, name }: PokemonCardProps) {
   return (
     <li
       key={id}
-      className="group rounded-lg overflow-hidden transition-transform ease-in-out duration-200 hover:-translate-y-1 w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+      className={`group rounded-lg overflow-hidden transition-transform ease-in-out duration-200 hover:-translate-y-1 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 `}
+      tabIndex={0}
     >
       <Link
         href={`/pokemon/${id}`}
@@ -52,7 +53,7 @@ export function PokemonCard({ id, name }: PokemonCardProps) {
         <span className="text-sm m-2 font-bold text-gray-400 font-flexo-bold mx-4">
           N.° {formattedId}
         </span>
-        <h2 className="text-xl font-semibold text-gray-700 font-flexo-demi mt-3 mx-4 ">
+        <h2 className="text-xl font-semibold text-gray-700 font-flexo-demi mt-3 mx-4">
           {name.charAt(0).toUpperCase() + name.slice(1)}
         </h2>
         <div className="flex gap-1 mx-4">

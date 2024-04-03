@@ -1,14 +1,33 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export function ButtonNext({ id }: { id: number }) {
+interface ButtonNextProps {
+  id: number;
+}
+
+export function ButtonNext({ id }: ButtonNextProps) {
   const router = useRouter();
 
   const handleNextPokemon = () => {
     const nextId = +id + 1;
     router.push(`/pokemon/${nextId}`);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight" || event.key === "j") {
+        event.preventDefault();
+        handleNextPokemon();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [id]);
 
   return (
     <button
@@ -20,15 +39,33 @@ export function ButtonNext({ id }: { id: number }) {
   );
 }
 
-export function ButtonPrev({ id }: { id: number }) {
+interface ButtonPrevProps {
+  id: number;
+}
+
+export function ButtonPrev({ id }: ButtonPrevProps) {
   const router = useRouter();
 
   const handlePrevPokemon = () => {
-    const prevId = +id - 1;
+    const prevId = id - 1;
     if (prevId >= 1) {
       router.push(`/pokemon/${prevId}`);
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft" || event.key === "k") {
+        event.preventDefault();
+        handlePrevPokemon();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [id]);
 
   return (
     <button

@@ -7,13 +7,14 @@ import { PokemonContainer } from "@/components/PokemonContainer";
 
 interface PokemonPageProps {
   params: {
-    id: string;
+    id: number;
   };
 }
 
 export default async function PokemonPage({ params }: PokemonPageProps) {
-  const pokemonId = parseInt(params.id, 10);
+  const pokemonId = params.id;
   const pokemonData: PokemonData = await getPokemon(pokemonId);
+
   const formattedId = pokemonId.toString().padStart(4, "0");
   const weightInKg = pokemonData.weight / 10;
   const heightInMeters = pokemonData.height / 10;

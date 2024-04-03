@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { PokemonCard } from "./pokemonCard";
 import { Input } from "@/components/ui/input";
 import { SimplePokemonDetails } from "@/types/pokemonTypes";
@@ -18,7 +18,8 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
   const [pokemonsPerPage, setPokemonsPerPage] = useState(8);
-
+  const lastPokemonRef = useRef<HTMLLIElement>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   // Filtrar y paginar la lista de Pokémon
   useEffect(() => {
     const startIndex = (currentPage - 1) * pokemonsPerPage;
@@ -44,7 +45,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [pokemonsPerPage]);
 
   // Manejar el scroll infinito en dispositivos móviles
   useEffect(() => {
@@ -65,6 +66,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
             loadedPokemonList.length + pokemonsPerPage
           );
           setLoadedPokemonList((prev) => [...prev, ...nextPokemons]);
+          lastPokemonRef.current?.scrollIntoView({ behavior: "smooth" });
         }
       }
     };
@@ -89,6 +91,37 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+  // Movimiento con teclas
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      paginate(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (isNextPageAvailable) {
+      paginate(currentPage + 1);
+    }
+  };
+  const handleKeyDown = (event: KeyboardEvent) => {
+    const { key } = event;
+
+    if (key === "ArrowLeft" || key === "k") {
+      event.preventDefault();
+      handlePreviousPage();
+    } else if (key === "ArrowRight" || key === "j") {
+      event.preventDefault();
+      handleNextPage();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [currentPage, isNextPageAvailable]);
 
   return (
     <>
@@ -107,7 +140,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
             {!isMobile && currentPage > 1 ? (
               <button
                 className="bg-white hover:bg-gray-200 text-gray-800 font-bold py-1 px-4 rounded border-double border-4 border-black pagination-button w-32 sm:block hidden"
-                onClick={() => paginate(currentPage - 1)}
+                onClick={handlePreviousPage}
               >
                 Previous
               </button>
@@ -128,7 +161,7 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
             {!isMobile && (
               <button
                 className="bg-white hover:bg-gray-200 text-gray-800 font-bold py-1 px-4 rounded border-double border-4 border-black pagination-button w-32 sm:block hidden"
-                onClick={() => paginate(currentPage + 1)}
+                onClick={handleNextPage}
                 disabled={!isNextPageAvailable}
               >
                 Next
@@ -137,9 +170,11 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
           </div>
           <PokemonContainer>
             <ul className="flex flex-wrap justify-center m-3">
-              {loadedPokemonList.map((pokemon) => {
+              {loadedPokemonList.map((pokemon, index) => {
                 const urlParts = pokemon.url.split("/");
                 const pokemonId = parseInt(urlParts[urlParts.length - 2]);
+                const isLast = pokemonId === loadedPokemonList.length - 1;
+                const isSelected = index === selectedIndex;
                 return (
                   <PokemonCard
                     key={pokemon.name}
