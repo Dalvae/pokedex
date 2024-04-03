@@ -23,12 +23,13 @@ export function PokemonCard({ id, name }: PokemonCardProps) {
     fetchPokemonData();
   }, [id]);
 
+  const formattedId = id.toString().padStart(4, "0");
+
   if (!pokemonData) {
-    return <PokemonCardSkeleton />;
+    return <PokemonCardSkeleton id={id} name={name} />;
   }
 
   const { sprite, types } = pokemonData;
-  const formattedId = id.toString().padStart(4, "0");
 
   return (
     <li
