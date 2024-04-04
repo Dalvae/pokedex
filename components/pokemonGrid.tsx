@@ -8,9 +8,13 @@ import { PokemonContainer } from "@/components/PokemonContainer";
 
 interface PokemonGridProps {
   pokemonList: SimplePokemonDetails[];
+  totalFetchedPokemons: number;
 }
 
-export function PokemonGrid({ pokemonList }: PokemonGridProps) {
+export function PokemonGrid({
+  pokemonList,
+  totalFetchedPokemons,
+}: PokemonGridProps) {
   const [searchText, setSearchText] = useState("");
   const [loadedPokemonList, setLoadedPokemonList] = useState<
     SimplePokemonDetails[]
@@ -168,7 +172,16 @@ export function PokemonGrid({ pokemonList }: PokemonGridProps) {
               </button>
             )}
           </div>
-          <PokemonContainer>
+          <PokemonContainer
+            currentProgress={
+              (currentPage - 1) * pokemonsPerPage + loadedPokemonList.length
+            }
+            totalProgress={
+              searchText.length > 0
+                ? filteredPokemons.length
+                : totalFetchedPokemons
+            }
+          >
             <ul className="flex flex-wrap justify-center m-3">
               {loadedPokemonList.map((pokemon, index) => {
                 const urlParts = pokemon.url.split("/");

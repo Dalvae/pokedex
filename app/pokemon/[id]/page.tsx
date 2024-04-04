@@ -4,6 +4,7 @@ import Image from "next/image";
 import { PokemonData } from "@/types/pokemonTypes";
 import { TypePills } from "@/components/ui/TypePills";
 import { PokemonContainer } from "@/components/PokemonContainer";
+import { totalPokemons } from "@/lib/pokeApi";
 
 interface PokemonPageProps {
   params: {
@@ -30,7 +31,11 @@ export default async function PokemonPage({ params }: PokemonPageProps) {
       <ButtonNext id={pokemonId} />
       <div className="container mx-auto max-w-screen-xl relative">
         <div className="flex justify-center">
-          <PokemonContainer className="max-w-3xl">
+          <PokemonContainer
+            currentProgress={pokemonId}
+            totalProgress={totalPokemons}
+            className="max-w-3xl"
+          >
             <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
               <div className="text-center flex justify-center items-baseline">
                 <h1 className="text-4xl font-flexo-demi mr-4 font-bold mb-2">
