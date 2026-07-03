@@ -7,13 +7,14 @@ import { PokemonContainer } from "@/components/PokemonContainer";
 import { totalPokemons } from "@/lib/pokeApi";
 
 interface PokemonPageProps {
-  params: {
-    id: number;
-  };
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function PokemonPage({ params }: PokemonPageProps) {
-  const pokemonId = params.id;
+  const { id } = await params;
+  const pokemonId = Number(id);
   const pokemonData: PokemonData = await getPokemon(pokemonId);
 
   const formattedId = pokemonId.toString().padStart(4, "0");
